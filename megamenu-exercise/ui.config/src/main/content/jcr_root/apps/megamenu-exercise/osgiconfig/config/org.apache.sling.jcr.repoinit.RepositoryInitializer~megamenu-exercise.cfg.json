@@ -1,0 +1,7 @@
+{
+    "scripts": [
+        "create path (sling:OrderedFolder) /content/dam/megamenu-exercise",
+        "create path (nt:unstructured) /content/dam/megamenu-exercise/jcr:content",
+        "set properties on /content/dam/megamenu-exercise/jcr:content\n  set cq:conf{String} to /conf/megamenu-exercise\n  set jcr:title{String} to \"Megamenu Exercise\"\nend"
+    ]
+}
