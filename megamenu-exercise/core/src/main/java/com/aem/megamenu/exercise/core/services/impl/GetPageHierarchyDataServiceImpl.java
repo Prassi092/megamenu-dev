@@ -52,5 +52,10 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
 
         return pageDataMap;
     }
+
+    @Override
+    public String testString() {
+        return "Test Text from GetPageHierarchyDataServiceImpl";
+    }
     
 }

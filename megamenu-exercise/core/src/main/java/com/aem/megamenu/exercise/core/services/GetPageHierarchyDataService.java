@@ -14,6 +14,8 @@ import com.aem.megamenu.exercise.core.models.PageDataModel;
  */
 public interface GetPageHierarchyDataService {
 
-    Map<String, List<PageDataModel>> getPageHierarchyData(); 
+    Map<String, List<PageDataModel>> getPageHierarchyData();
+
+    String testString();
 
 }
