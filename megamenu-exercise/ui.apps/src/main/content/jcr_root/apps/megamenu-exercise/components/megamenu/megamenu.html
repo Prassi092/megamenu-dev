@@ -1,1 +1,29 @@
 <div>MEGAMENU COMPONENT</div>
+
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.all @ categories='clientlib-megamenu'}"/>
+
+<!-- MENU 1 -->
+<div class="megamenu-menu" tabindex="0">
+    
+    MENU 1
+    <div class="sub-menu-wrapper collapsed">
+        <ul>
+            <li><a href="/link-1">Menu Item 1.1</a></li>
+            <li><a href="/link-2">Menu Item 1.2</a></li>
+            <!-- Add more menu items as needed -->
+        </ul>
+    </div>
+</div>
+
+<!-- MENU 2 -->
+<div class="megamenu-menu" tabindex="0">
+    
+    MENU 2
+    <div class="sub-menu-wrapper collapsed">
+        <ul>
+            <li><a href="/link-1">Menu Item 2.1</a></li>
+            <li><a href="/link-2">Menu Item 2.2</a></li>
+            <!-- Add more menu items as needed -->
+        </ul>
+    </div>
+</div>
