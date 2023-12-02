@@ -15,7 +15,7 @@ import com.aem.megamenu.exercise.core.services.GetPageHierarchyDataService;
  * @inheritDoc
  */
 @Component(service = GetPageHierarchyDataService.class, immediate = true, property = {
-        "GetPageHierarchyDataService = Get the underlying Page Hierarchy and its properties" })
+        "service.description=Get the underlying Page Hierarchy and its properties" } )
 //@Designate(ocd = GetPageHierarchyDataServiceImpl.Config.class)
 public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataService {
 

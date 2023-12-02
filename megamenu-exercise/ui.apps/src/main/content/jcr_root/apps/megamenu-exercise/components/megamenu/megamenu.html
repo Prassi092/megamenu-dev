@@ -1,4 +1,8 @@
 <div>MEGAMENU COMPONENT</div>
+<div  class="test123" data-sly-use.pageDataService="com.aem.megamenu.exercise.core.models.MegaMenuModal">
+    <p>${pageDataService.testData}</p>
+</div>
+
 
 <sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.all @ categories='clientlib-megamenu'}"/>
 <div class="megamenu-menu-container">
