@@ -3,6 +3,8 @@ package com.aem.megamenu.exercise.core.services;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.sling.api.resource.LoginException;
+
 import com.aem.megamenu.exercise.core.models.PageDataModel;
 
 /**
@@ -14,7 +16,7 @@ import com.aem.megamenu.exercise.core.models.PageDataModel;
  */
 public interface GetPageHierarchyDataService {
 
-    public Map<String, List<PageDataModel>> getPageHierarchyData();
+    public Map<String, List<PageDataModel>> getPageHierarchyData() throws LoginException;
 
     public String testString();
 

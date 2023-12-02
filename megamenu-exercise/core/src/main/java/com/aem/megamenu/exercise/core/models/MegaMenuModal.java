@@ -6,9 +6,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.models.annotations.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aem.megamenu.exercise.core.services.GetPageHierarchyDataService;
+import java.util.Collections;
 
 @Model(adaptables = SlingHttpServletRequest.class)
 public class MegaMenuModal {
@@ -16,11 +20,18 @@ public class MegaMenuModal {
     @Inject
     private GetPageHierarchyDataService getPageHierarchyDataService;
 
+    private static final Logger LOG = LoggerFactory.getLogger(MegaMenuModal.class);
+
     public String testData() {
         return getPageHierarchyDataService.testString();
     }
 
     public Map<String, List<PageDataModel>> getPageHierarchyData(){
-        return getPageHierarchyDataService.getPageHierarchyData();
+        try {
+            return getPageHierarchyDataService.getPageHierarchyData();
+        } catch (LoginException e) {
+            LOG.error("Login Exception Faced while trying to read the Page Hierarchy properties !");
+        }
+        return Collections.emptyMap();
     }
 }
