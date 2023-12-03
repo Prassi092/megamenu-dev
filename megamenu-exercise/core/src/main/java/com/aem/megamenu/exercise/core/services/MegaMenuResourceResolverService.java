@@ -10,5 +10,10 @@ import org.apache.sling.api.resource.ResourceResolver;
  */
 public interface MegaMenuResourceResolverService {
     
+    /**
+     * Method to provide the Service Resource Resolver,
+     * for the component specific SubService with access to resources.
+     * @return Service Resource Resolver
+     */
     ResourceResolver getMegaMenuResourceResolver();
 }

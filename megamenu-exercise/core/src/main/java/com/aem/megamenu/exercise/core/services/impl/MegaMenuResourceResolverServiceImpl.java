@@ -36,7 +36,7 @@ public class MegaMenuResourceResolverServiceImpl implements MegaMenuResourceReso
             resourceResolver = resourceResolverFactory.getServiceResourceResolver(param);
             
         } catch (LoginException e) {
-            LOG.error("Exception occurred while getting resource resolver for Keystore User : {}",
+            LOG.error("Exception occurred while getting resource resolver for Service User : {}",
                     e.getMessage());
         }
 

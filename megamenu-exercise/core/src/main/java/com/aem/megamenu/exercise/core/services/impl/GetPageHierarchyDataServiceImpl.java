@@ -1,12 +1,11 @@
 package com.aem.megamenu.exercise.core.services.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.jsp.tagext.PageData;
 
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
@@ -59,22 +58,12 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
     public Map<String, List<PageDataModel>> getPageHierarchyData() throws LoginException {
 
         LOG.debug("Method Entry :: getPageHierarchyData of GetPageHierarchyDataServiceImpl class");
-        Map<String, List<PageDataModel>> pageDataMap = new HashMap<>();
 
-        String sourcePath = "";
-        String rootPath = pageConfig.sourcePath();
-        String[] pageLevels = rootPath.split("/");
-
-        if(pageLevels.length > 2){
-            for(int i=0;i<3;i++){
-                sourcePath += "/"+pageLevels[i];
-            }
-        }else{
-            LOG.info("Source path - {}, doesn't have enough Page levels to populate Mega Menu", rootPath);
-        }
-
-        // Find the Resource using the Source path..
-        ResourceResolver resourceResolver  = megaMenuResourceResolverService.getMegaMenuResourceResolver();
+        //Formatting the Source Node..
+        String sourcePath = getFormattedSourcePath();
+        
+        // Fetching the Resource Resolver
+        ResourceResolver resourceResolver = megaMenuResourceResolverService.getMegaMenuResourceResolver();
         if(resourceResolver != null){
             Resource resource = resourceResolver.getResource(sourcePath);
             if(resource != null){
@@ -82,78 +71,50 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
                 Page page = pageManager.getContainingPage(resource);
 
-                // Get an iterator of immediate child pages (depth = 1)
-                Iterator<Page> childPages = page.listChildren(new PageFilter());
+                LOG.debug("Method Exit :: getPageHierarchyData of GetPageHierarchyDataServiceImpl class");
+                return buildPageHierarchyDataMap(page);
 
-                while(childPages.hasNext()){
-
-                    Page menuPage = childPages.next();
-                    List<PageDataModel> SubMenuList = new ArrayList<PageDataModel>();
-                    
-                    // If page config is allowed,
-                    if(!isHideInMegaMenu(menuPage) && (!isHideChildrenInMegaMenu(menuPage))){
-
-                            Iterator<Page> subMenuPages = menuPage.listChildren(new PageFilter());
-                            while(subMenuPages.hasNext()){
-
-                                Page subMenuPage = subMenuPages.next();
-                                if(!isHideInMegaMenu(subMenuPage)){
-
-                                    PageDataModel subMenuModel = new PageDataModel();
-                                    subMenuModel.setTitle(subMenuPage.getPageTitle());
-                                    subMenuModel.setPath(subMenuPage.getPath());
-
-                                    SubMenuList.add(subMenuModel);
-                                }
-                            }
-                    }
-                    pageDataMap.put(menuPage.getTitle(), SubMenuList);
-                }
+                
             }else{
                 LOG.info("Unable to identify resource at :: {}", sourcePath);
+            }
+
+            if(resourceResolver.isLive()){
+                resourceResolver.close();
             }
         }else{
             LOG.info("Unable to get a Resource Resolver");
         }
 
-
-        
-
-        // PageDataModel subMenu1_1 = new PageDataModel();
-        // subMenu1_1.setTitle("Sub-Menu 1.1");
-        // subMenu1_1.setPath("/content/sg/en/x1/yy");
-        // PageDataModel subMenu1_2 = new PageDataModel();
-        // subMenu1_2.setTitle("Sub-Menu 1.2");
-        // subMenu1_2.setPath("/content/sg/en/x1/zz");
-
-        // PageDataModel subMenu2_1 = new PageDataModel();
-        // subMenu2_1.setTitle("Sub-Menu 2.1");
-        // subMenu2_1.setPath("/content/sg/en/x2/yy");
-        // PageDataModel subMenu2_2 = new PageDataModel();
-        // subMenu2_2.setTitle("Sub-Menu 2.2");
-        // subMenu2_2.setPath("/content/sg/en/x2/zz");
-
-        // List<PageDataModel> SubMenuList1 = new ArrayList<PageDataModel>();
-        // SubMenuList1.add(subMenu1_1);
-        // SubMenuList1.add(subMenu1_2);
-
-        // List<PageDataModel> SubMenuList2 = new ArrayList<PageDataModel>();
-        // SubMenuList2.add(subMenu2_1);
-        // SubMenuList2.add(subMenu2_2);
-        
-        // // Returning Mock static data for testing..
-        // Map<String, List<PageDataModel>> pageDataMap = new HashMap<>();
-
-        // pageDataMap.put("Test Menu1", SubMenuList1);
-        // pageDataMap.put("Test Menu1", SubMenuList2);
-
         LOG.debug("Method Exit :: getPageHierarchyData of GetPageHierarchyDataServiceImpl class");
-        return pageDataMap;
+        return Collections.emptyMap();
     }
 
     @Override
-    public String testString() {
-        return "Test Text from GetPageHierarchyDataServiceImpl";
+    public String getHeaderMsg() {
+        return pageConfig.headerMsg();
+    }
+
+    /**
+     * Method to return the formatted three level hierarchy of Root path..
+     * @return Root Node path for Mega Menu
+     */
+    private String getFormattedSourcePath(){
+        LOG.debug("Method Entry :: getFormattedSourcePath of GetPageHierarchyDataServiceImpl class");
+
+        StringBuilder sourcePath = new StringBuilder();
+        String rootPath = pageConfig.sourcePath();
+        String[] pageLevels = rootPath.split("/");
+
+        if(pageLevels.length > 2){
+            for(int i=0;i<3;i++){
+                sourcePath.append("/"+pageLevels[i]);
+            }
+        }else{
+            LOG.info("Source path - {}, doesn't have enough Page levels to populate Mega Menu", rootPath);
+        }
+        LOG.debug("Method Exit :: getFormattedSourcePath of GetPageHierarchyDataServiceImpl class");
+        return sourcePath.toString() ;
     }
     
     /**
@@ -193,5 +154,64 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
         LOG.debug("Method Exit :: isHideChildrenInMegaMenu of GetPageHierarchyDataServiceImpl class");
         return isHide;
     }
+
+    /**
+     * Method to build a Map of Hierarchy data for a given page..
+     * 
+     * @param page
+     * @return Map of Paren to Childeren page
+     */
+    private Map<String, List<PageDataModel>> buildPageHierarchyDataMap(Page page){
+        LOG.debug("Method Entry :: buildPageHierarchyDataMap of GetPageHierarchyDataServiceImpl class");
+        
+        Map<String, List<PageDataModel>> pageDataMap = new HashMap<>();
+
+        // Getting an iterator of immediate child pages (depth = 1)
+        Iterator<Page> childPages = page.listChildren(new PageFilter());
+
+        while(childPages.hasNext()){
+
+            Page menuPage = childPages.next();
+            List<PageDataModel> subMenuList = new ArrayList<>();
+                    
+            // Checking the boolean Page properties for MENU.. 
+            if(!isHideInMegaMenu(menuPage) && (!isHideChildrenInMegaMenu(menuPage))){
+                pageDataMap.put(menuPage.getTitle(), getSubMenuModelList(menuPage, subMenuList));
+            }
+        }
+        LOG.debug("Method Exit :: buildPageHierarchyDataMap of GetPageHierarchyDataServiceImpl class");
+        return pageDataMap;
+    }
     
+
+    /**
+     * Get a List of Sub Menu Models for a give Parent page.
+     * @param menuPage
+     * @param subMenuList
+     * @return Sub-menu Model list.
+     */
+    private List<PageDataModel> getSubMenuModelList(Page menuPage, List<PageDataModel> subMenuList){
+
+        LOG.debug("Method Entry :: getSubMenuModelList of GetPageHierarchyDataServiceImpl class");
+
+        // List first level of Children nodes.
+        Iterator<Page> subMenuPages = menuPage.listChildren(new PageFilter());
+        while(subMenuPages.hasNext()){
+            
+            Page subMenuPage = subMenuPages.next();
+            if(!isHideInMegaMenu(subMenuPage)){
+                
+                PageDataModel subMenuModel = new PageDataModel();
+                subMenuModel.setTitle(subMenuPage.getPageTitle());
+                subMenuModel.setPath(subMenuPage.getPath());
+                
+                //Adding list of Sub-menu models..
+                subMenuList.add(subMenuModel);
+            }
+        }
+
+        LOG.debug("Method Exit :: getSubMenuModelList of GetPageHierarchyDataServiceImpl class");
+        return subMenuList;
+
+    }
 }

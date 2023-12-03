@@ -16,8 +16,18 @@ import com.aem.megamenu.exercise.core.models.PageDataModel;
  */
 public interface GetPageHierarchyDataService {
 
+    /**
+     * Method to get the Page HierarchyData from the configured Root Node, to form the Mega Menu options..
+     * @return Map of Page Hierarchy data
+     * @throws LoginException
+     */
     public Map<String, List<PageDataModel>> getPageHierarchyData() throws LoginException;
 
+    /**
+     * Method to get the configured 
+     * Header String of the Mega Menu component..
+     * @return Header message
+     */
     public String getHeaderMsg();
 
 }
