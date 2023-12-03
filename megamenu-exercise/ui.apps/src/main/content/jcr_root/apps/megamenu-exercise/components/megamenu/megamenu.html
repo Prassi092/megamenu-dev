@@ -1,33 +1,24 @@
-<div>MEGAMENU COMPONENT</div>
-<div  class="test123" data-sly-use.pageDataService="com.aem.megamenu.exercise.core.models.MegaMenuModal">
-    <p>${pageDataService.testData}</p>
-</div>
-
-
+<!-- MEGAMENU COMPONENT -->
 <sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.all @ categories='clientlib-megamenu'}"/>
-<div class="megamenu-menu-container">
-    <!-- MENU 1 -->
-    <div class="megamenu-menu" tabindex="0">
-        MENU 1
-        <div class="sub-menu-wrapper collapsed">
-            <ul>
-                <li><a href="/link-1">Menu Item 1.1</a></li>
-                <li><a href="/link-2">Menu Item 1.2</a></li>
-            </ul>
-        </div>
-    </div>
 
-    <!-- MENU 2 -->
-    <div class="megamenu-menu" tabindex="0">
-    
-        MENU 2
-        <div class="sub-menu-wrapper collapsed">
-            <ul>
-                <li><a href="/link-1">Menu Item 2.1</a></li>
-                <li><a href="/link-2">Menu Item 2.2</a></li>
-                <!-- Add more menu items as needed -->
-            </ul>
+<sly data-sly-use.pageDataService="com.aem.megamenu.exercise.core.models.MegaMenuModal">
+    <!-- <Heading above MegaMenu -->
+    ${pageDataService.headerMessage}
+    <!-- Megamenu Container-->
+    <div class="megamenu-menu-container">
+        <!-- MENU Level -->
+        <div class="megamenu-menu" tabindex="${index}" data-sly-list.menu="${pageDataService.map}">
+            <!-- Menu Title  -->
+            ${menu}
+            <!-- Sub-Menu Level -->
+            <div class="sub-menu-wrapper collapsed" data-sly-list.subMenuModal = "${pageDataService.map[menu]}">
+                <ul>
+                    <!-- Sub-Meny Entry -->
+                    <li><a href="${subMenuModal.path}">${subMenuModal.name}</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+</sly>
+
 

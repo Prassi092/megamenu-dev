@@ -22,11 +22,11 @@ public class MegaMenuModal {
 
     private static final Logger LOG = LoggerFactory.getLogger(MegaMenuModal.class);
 
-    public String testData() {
+    public String getHeaderMessage() {
         return getPageHierarchyDataService.testString();
     }
 
-    public Map<String, List<PageDataModel>> getPageHierarchyData(){
+    public Map<String, List<PageDataModel>> getMap(){
         try {
             return getPageHierarchyDataService.getPageHierarchyData();
         } catch (LoginException e) {
