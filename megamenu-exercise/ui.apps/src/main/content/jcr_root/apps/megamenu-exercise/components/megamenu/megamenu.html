@@ -5,16 +5,18 @@
     <!-- <Heading above MegaMenu -->
     ${pageDataService.headerMessage}
     <!-- Megamenu Container-->
-    <div class="megamenu-menu-container">
+    <div class="megamenu-menu-container" data-sly-list.menu="${pageDataService.map}">
         <!-- MENU Level -->
-        <div class="megamenu-menu" tabindex="${index}" data-sly-list.menu="${pageDataService.map}">
+        <div class="megamenu-menu navigate" tabindex="${menuList.index}">
             <!-- Menu Title  -->
             ${menu}
             <!-- Sub-Menu Level -->
-            <div class="sub-menu-wrapper collapsed" data-sly-list.subMenuModal = "${pageDataService.map[menu]}">
-                <ul>
+            <div class="sub-menu-wrapper collapsed">
+                <ul data-sly-list.subMenuModal = "${pageDataService.map[menu]}">
                     <!-- Sub-Meny Entry -->
-                    <li><a href="${subMenuModal.path}">${subMenuModal.name}</a></li>
+                    <div class="navigate">
+                        <li href="${subMenuModal.path}">${subMenuModal.title} </li>
+                    </div>
                 </ul>
             </div>
         </div>

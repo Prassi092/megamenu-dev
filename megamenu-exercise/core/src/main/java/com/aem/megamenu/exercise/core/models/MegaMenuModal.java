@@ -23,7 +23,7 @@ public class MegaMenuModal {
     private static final Logger LOG = LoggerFactory.getLogger(MegaMenuModal.class);
 
     public String getHeaderMessage() {
-        return getPageHierarchyDataService.testString();
+        return getPageHierarchyDataService.getHeaderMsg();
     }
 
     public Map<String, List<PageDataModel>> getMap(){
