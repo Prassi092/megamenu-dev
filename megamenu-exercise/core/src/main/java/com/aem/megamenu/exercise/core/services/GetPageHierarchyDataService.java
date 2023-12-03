@@ -21,7 +21,7 @@ public interface GetPageHierarchyDataService {
      * @return Map of Page Hierarchy data
      * @throws LoginException
      */
-    public Map<String, List<PageDataModel>> getPageHierarchyData() throws LoginException;
+    public Map<PageDataModel, List<PageDataModel>> getPageHierarchyData() throws LoginException;
 
     /**
      * Method to get the configured 

@@ -9,7 +9,7 @@
         <!-- MENU Level -->
         <div class="megamenu-menu navigate" tabindex="${menuList.index}">
             <!-- Menu Title  -->
-            ${menu}
+            <p href="${menu.path}">${menu.title}</p>
             <!-- Sub-Menu Level -->
             <div class="sub-menu-wrapper collapsed">
                 <ul data-sly-list.subMenuModal = "${pageDataService.map[menu]}">

@@ -34,14 +34,14 @@ public class MegaMenuModal {
      * Method to return the Page Hierarchy map.
      * @return map
      */
-    public Map<String, List<PageDataModel>> getMap(){
+    public Map<PageDataModel, List<PageDataModel>> getMap(){
         LOG.debug("Method Entry :: getMap of MegaMenuModal class");
         try {
             return getPageHierarchyDataService.getPageHierarchyData();
         } catch (LoginException e) {
             LOG.error("Login Exception Faced while trying to read the Page Hierarchy properties !");
         }
-        LOG.debug("Method Entry :: getMap of MegaMenuModal class");
+    LOG.debug("Method Entry :: getMap of MegaMenuModal class");
         return Collections.emptyMap();
     }
 }

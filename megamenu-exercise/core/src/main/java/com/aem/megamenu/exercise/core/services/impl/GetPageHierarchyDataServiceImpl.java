@@ -55,7 +55,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
     }
 
     @Override
-    public Map<String, List<PageDataModel>> getPageHierarchyData() throws LoginException {
+    public Map<PageDataModel, List<PageDataModel>> getPageHierarchyData() throws LoginException {
 
         LOG.debug("Method Entry :: getPageHierarchyData of GetPageHierarchyDataServiceImpl class");
 
@@ -71,6 +71,8 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
                 Page page = pageManager.getContainingPage(resource);
 
+                clearResolver(resourceResolver);
+
                 LOG.debug("Method Exit :: getPageHierarchyData of GetPageHierarchyDataServiceImpl class");
                 return buildPageHierarchyDataMap(page);
 
@@ -79,9 +81,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                 LOG.info("Unable to identify resource at :: {}", sourcePath);
             }
 
-            if(resourceResolver.isLive()){
-                resourceResolver.close();
-            }
+            clearResolver(resourceResolver);
         }else{
             LOG.info("Unable to get a Resource Resolver");
         }
@@ -93,6 +93,16 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
     @Override
     public String getHeaderMsg() {
         return pageConfig.headerMsg();
+    }
+
+    /**
+     * Method to release the Resolver
+     * @param resourceResolver
+     */
+    private void clearResolver(ResourceResolver resourceResolver) {
+        if(resourceResolver.isLive()){
+            resourceResolver.close();
+        }
     }
 
     /**
@@ -161,10 +171,14 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
      * @param page
      * @return Map of Paren to Childeren page
      */
-    private Map<String, List<PageDataModel>> buildPageHierarchyDataMap(Page page){
+    private Map<PageDataModel, List<PageDataModel>> buildPageHierarchyDataMap(Page page){
         LOG.debug("Method Entry :: buildPageHierarchyDataMap of GetPageHierarchyDataServiceImpl class");
         
-        Map<String, List<PageDataModel>> pageDataMap = new HashMap<>();
+        Map<PageDataModel, List<PageDataModel>> pageDataMap = new HashMap<>();
+
+        PageDataModel menuModel = new PageDataModel();
+        menuModel.setTitle(page.getPageTitle());
+        menuModel.setPath(page.getPath());
 
         // Getting an iterator of immediate child pages (depth = 1)
         Iterator<Page> childPages = page.listChildren(new PageFilter());
@@ -176,7 +190,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                     
             // Checking the boolean Page properties for MENU.. 
             if(!isHideInMegaMenu(menuPage) && (!isHideChildrenInMegaMenu(menuPage))){
-                pageDataMap.put(menuPage.getTitle(), getSubMenuModelList(menuPage, subMenuList));
+                pageDataMap.put(menuModel, getSubMenuModelList(menuPage, subMenuList));
             }
         }
         LOG.debug("Method Exit :: buildPageHierarchyDataMap of GetPageHierarchyDataServiceImpl class");
