@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aem.megamenu.exercise.core.models.PageDataModel;
 import com.aem.megamenu.exercise.core.services.GetPageHierarchyDataService;
+import com.aem.megamenu.exercise.core.services.MegaMenuResourceResolverService;
 import com.aem.megamenu.exercise.core.services.config.GetPageHierarchyDataServiceConfig;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
@@ -44,6 +45,9 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
 
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
+
+    @Reference
+    private MegaMenuResourceResolverService megaMenuResourceResolverService;
 
     @Activate
     @Modified
@@ -70,7 +74,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
         }
 
         // Find the Resource using the Source path..
-        ResourceResolver resourceResolver  = resourceResolverFactory.getServiceResourceResolver(null);
+        ResourceResolver resourceResolver  = megaMenuResourceResolverService.getMegaMenuResourceResolver();
         if(resourceResolver != null){
             Resource resource = resourceResolver.getResource(sourcePath);
             if(resource != null){
@@ -87,9 +91,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                     List<PageDataModel> SubMenuList = new ArrayList<PageDataModel>();
                     
                     // If page config is allowed,
-                    if(!isHideInMegaMenu(menuPage)){
-                        
-                        if(!isHideChildrenInMegaMenu(menuPage)){
+                    if(!isHideInMegaMenu(menuPage) && (!isHideChildrenInMegaMenu(menuPage))){
 
                             Iterator<Page> subMenuPages = menuPage.listChildren(new PageFilter());
                             while(subMenuPages.hasNext()){
@@ -104,7 +106,6 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
                                     SubMenuList.add(subMenuModel);
                                 }
                             }
-                        }
                     }
                     pageDataMap.put(menuPage.getTitle(), SubMenuList);
                 }
