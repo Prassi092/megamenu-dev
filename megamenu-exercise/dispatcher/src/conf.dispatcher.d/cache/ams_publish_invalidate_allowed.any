@@ -7,3 +7,21 @@
 	/glob "${PUBLISH_IP}"
 	/type "allow"
 }
+/02{
+    /glob "*"
+    /type "deny"
+}
+/03{
+	/type "allow"
+	/url "*/megamenu-exercise/components/megamenu*"
+}
+/04 {
+	/type "allow"
+	/url "/content/megamenu-exercise/en-root/*"
+	/statfileslevel  "3"
+}
+#cache the Megamenu Experience Fragments
+/0003 {
+	/type "allow"
+	/url "/content/experience-fragments/megamenu-exercise/megamenu-xp"
+}

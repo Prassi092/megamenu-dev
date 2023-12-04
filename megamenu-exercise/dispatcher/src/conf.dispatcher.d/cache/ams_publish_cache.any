@@ -15,3 +15,21 @@
 	/glob "/libs/granite/csrf/token.json"
 	/type "deny"
 }
+#Cache the MegaMenu Component
+/0002 {
+	/type "allow"
+	/url "*/megamenu-exercise/components/megamenu*"
+    /filter "(extension == 'html')"
+}
+#Cache the Megamenu's payload pages
+/0003 {
+	/type "allow"
+	/url "/content/megamenu-exercise/en-root/*"
+    /filter "(extension == 'html')"
+}
+#cache the Megamenu Experience Fragments
+/0003 {
+	/type "allow"
+	/url "/content/experience-fragments/megamenu-exercise/megamenu-xp"
+    /filter "(extension == 'html')"
+}
