@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Attach focus and blur listeners to each div element
     for (const menu of megamenuEl) {
-        // menu.addEventListener("focus", toggleSubMenu);
-        // menu.addEventListener("blur", toggleSubMenu);
+        menu.addEventListener("focus", toggleSubMenu);
+        menu.addEventListener("blur", toggleSubMenu);
         menu.addEventListener("mouseleave", toggleSubMenu);
         menu.addEventListener("mouseenter", toggleSubMenu);
     }

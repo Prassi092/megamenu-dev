@@ -192,7 +192,7 @@ public class GetPageHierarchyDataServiceImpl implements GetPageHierarchyDataServ
 
                 //Populate Sub-menu only when Menu is false for isHideChildren property..
                 pageDataMap.put(menuModel, 
-                    (!isHideChildrenInMegaMenu(menuPage)) ? getSubMenuModelList(menuPage, subMenuList) : null);
+                    (!isHideChildrenInMegaMenu(menuPage)) ? getSubMenuModelList(menuPage, subMenuList) : new ArrayList<PageDataModel>());
             }
         }
         LOG.debug("Method Exit :: buildPageHierarchyDataMap of GetPageHierarchyDataServiceImpl class");
