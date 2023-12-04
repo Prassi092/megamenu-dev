@@ -29,7 +29,7 @@ public class MegaMenuResourceResolverServiceImpl implements MegaMenuResourceReso
         LOG.debug("Method Entry :: getMegaMenuResourceResolver of MegaMenuResourceResolverServiceImpl class");
        
         ResourceResolver resourceResolver = null;
-        try {
+        try{
 
             Map<String, Object> param = new HashMap<>();
             param.put(ResourceResolverFactory.SUBSERVICE, "componentAccessSubService");

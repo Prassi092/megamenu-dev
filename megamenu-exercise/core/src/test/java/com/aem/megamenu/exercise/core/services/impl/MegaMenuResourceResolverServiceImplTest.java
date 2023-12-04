@@ -1,5 +1,6 @@
 package com.aem.megamenu.exercise.core.services.impl;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +47,5 @@ class MegaMenuResourceResolverServiceImplTest {
         Mockito.lenient().when(resourceResolverFactory.getServiceResourceResolver(any()))
                 .thenThrow(new LoginException());
         Assertions.assertNull(resolveServiceMockImpl.getMegaMenuResourceResolver());
-
     }
 }
