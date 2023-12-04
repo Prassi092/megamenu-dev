@@ -37,7 +37,9 @@ PassEnv DISP_ID
 			SetHandler dispatcher-handler
 		</IfModule>
 		Options FollowSymLinks
-		AllowOverride None
+		AllowOverride None 
+
+		AddOutputFilter INCLUDES /megamenu-exercise/components/megamenu
 		Require all granted
 		# Insert filter
 		SetOutputFilter DEFLATE

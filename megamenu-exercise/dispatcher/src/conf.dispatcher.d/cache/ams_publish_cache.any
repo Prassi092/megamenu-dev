@@ -33,3 +33,9 @@
 	/url "/content/experience-fragments/megamenu-exercise/megamenu-xp"
     /filter "(extension == 'html')"
 }
+
+# SDI Nocache to avoid Dispatcher cache of component that changes quickly
+#/Nocache{
+	/glob "*component-selector*.html*"
+	/type deny
+}

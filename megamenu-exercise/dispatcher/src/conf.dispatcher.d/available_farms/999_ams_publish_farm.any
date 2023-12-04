@@ -112,5 +112,6 @@
 		# expiry date. When the cache file is requested past the modification time
 		# it is automatically re-requested from the backend.
 		# /enableTTL "1"
+		# enableTTL above to be enabled, if Time based refresh of cache has to be done
 	}
 }
