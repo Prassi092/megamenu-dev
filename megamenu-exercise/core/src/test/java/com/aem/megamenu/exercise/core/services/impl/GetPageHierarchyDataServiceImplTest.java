@@ -3,12 +3,10 @@ package com.aem.megamenu.exercise.core.services.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
@@ -19,9 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.osgi.service.component.annotations.Reference;
 
 import com.aem.megamenu.exercise.core.models.PageDataModel;
 import com.aem.megamenu.exercise.core.services.MegaMenuResourceResolverService;
@@ -32,8 +28,6 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith({AemContextExtension.class, MockitoExtension.class})
 class GetPageHierarchyDataServiceImplTest {
-
-    public final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
 
     @InjectMocks
     GetPageHierarchyDataServiceImpl pageHierarchyServiceImpl;
@@ -47,10 +41,18 @@ class GetPageHierarchyDataServiceImplTest {
     @Mock
     ResourceResolver mockResolver;
 
+    public final AemContext context = new AemContext(ResourceResolverType.JCR_MOCK);
+
+    @BeforeEach
+    public void setUp() throws Exception{
+        context.load().json("/sourcepage.json", "/content/megamenu-exercise/en-root");
+        //context.load().json("/com/aem/megamenu/exercise/core/resources/sourcepage.json", "/content/megamenu-exercise/en-root");
+    }
+
     @Test
     void testConfigure() {
         pageHierarchyServiceImpl.configure(mockConfig);
-        assertNotNull(context);
+        assertNotNull(mockConfig);
     }
 
     @Test
@@ -61,8 +63,7 @@ class GetPageHierarchyDataServiceImplTest {
 
     @Test
     void testGetPageHierarchyData() throws LoginException {
-
-        context.load().json("/com/aem/megamenu/exercise/core/services/resources/sourcepage.json", "/content/megamenu-exercise/en-root");
+        
         Resource sourcePageResource = context.resourceResolver().getResource("/content/megamenu-exercise/en-root");
 
         when(mockConfig.sourcePath()).thenReturn("/content/megamenu-exercise/en-root");
@@ -92,14 +93,14 @@ class GetPageHierarchyDataServiceImplTest {
     }
 
     @Test
-    void testGetPageHierarchyData_null_resolver() throws LoginException {
+    void testGetPageHierarchyDataNullResolver() throws LoginException {
         when(mockConfig.sourcePath()).thenReturn("/content/megamenu-exercise/en-root");
         when(mockResolverService.getMegaMenuResourceResolver()).thenReturn(null);
         assertEquals(0, pageHierarchyServiceImpl.getPageHierarchyData().size());
     }
 
     @Test
-    void testGetPageHierarchyData_wrong_path_and_null_resource() throws LoginException {
+    void testGetPageHierarchyDataWrongPathAndNullResource() throws LoginException {
         when(mockConfig.sourcePath()).thenReturn("/content/invalid-path");
         when(mockResolverService.getMegaMenuResourceResolver()).thenReturn(mockResolver);
         when(mockResolver.getResource("/content/invalid-path")).thenReturn(null);
